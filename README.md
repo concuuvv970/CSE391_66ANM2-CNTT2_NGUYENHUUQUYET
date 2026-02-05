@@ -43,6 +43,12 @@ Môn học giúp sinh viên xây dựng nền tảng vững chắc để tiếp 
 
 ---
 
+## 👩‍🏫 Giảng viên giảng dạy
+- Giảng viên: Tạ Chí Hiếu
+- Email: Hieuta.pccc@gmail.com
+
+---
+
 ## 👨‍🎓 Thông tin sinh viên
 - Họ và tên: Nguyễn Hữu Quyết
 - Mã sinh viên: 2451271155
@@ -50,4 +56,3 @@ Môn học giúp sinh viên xây dựng nền tảng vững chắc để tiếp 
 
 ---
 
-✨ *Đoạn trên được hỗ trợ bởi chatgpt.com*
