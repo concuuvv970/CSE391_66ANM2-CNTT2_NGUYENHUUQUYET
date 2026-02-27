@@ -1,0 +1,73 @@
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  font-family: 'Quicksand', sans-serif;
+  background-color: #f0fafa; /* Màu nền nhạt cho trang */
+}
+
+/* Header */
+header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem 5%;
+  background-color: transparent;
+  position: absolute; /* Để đè lên ảnh nền hero */
+  top: 0;
+  left: 0;
+  width: 100%;
+  z-index: 10;
+}
+
+#page-logo a {
+  font-family: 'Oleo Script', cursive;
+  font-size: 2rem;
+  color: #ffeb3b;
+  text-decoration: none;
+  text-shadow: 1px 1px 2px rgba(0,0,0,0.5);
+}
+
+nav ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+}
+
+nav li {
+  margin-left: 1.5rem;
+}
+
+nav a {
+  text-decoration: none;
+  color: #ffeb3b;
+  font-weight: 500;
+  transition: color 0.3s;
+}
+
+nav a:hover {
+  color: #ffeb3b;
+}
+
+/* Footer */
+footer {
+  background-color: #1a1a1a;
+  padding: 2rem;
+  display: flex;
+  justify-content: center;
+}
+
+footer ul {
+  list-style: none;
+  display: flex;
+  gap: 2rem;
+}
+
+footer img {
+  width: 40px;
+  height: 40px;
+  filter: invert(1); /* Chuyển icon sang màu trắng nếu cần */
+}
