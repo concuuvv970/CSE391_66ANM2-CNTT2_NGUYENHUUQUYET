@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Form Đăng Ký</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+  <style>
+    .error-message {
+      color: red;
+      font-size: 0.9rem;
+    }
+  </style>
+</head>
+<body>
+
+<div class="container mt-5">
+  <h2>Form Đăng Ký</h2>
+  <form id="registration-form">
+    <div class="mb-3">
+      <label for="fullname" class="form-label">Họ và tên</label>
+      <input type="text" class="form-control" id="fullname" name="fullname">
+      <div id="fullname-error" class="error-message"></div>
+    </div>
+    
+    <div class="mb-3">
+      <label for="email" class="form-label">Email</label>
+      <input type="email" class="form-control" id="email" name="email">
+      <div id="email-error" class="error-message"></div>
+    </div>
+    
+    <div class="mb-3">
+      <label for="phone" class="form-label">Số điện thoại</label>
+      <input type="text" class="form-control" id="phone" name="phone">
+      <div id="phone-error" class="error-message"></div>
+    </div>
+    
+    <div class="mb-3">
+      <label for="password" class="form-label">Mật khẩu</label>
+      <input type="password" class="form-control" id="password" name="password">
+      <div id="password-error" class="error-message"></div>
+    </div>
+    
+    <div class="mb-3">
+      <label for="confirm-password" class="form-label">Xác nhận mật khẩu</label>
+      <input type="password" class="form-control" id="confirm-password" name="confirm-password">
+      <div id="confirm-password-error" class="error-message"></div>
+    </div>
+
+    <div class="mb-3">
+      <label for="gender" class="form-label">Giới tính</label><br>
+      <input type="radio" id="male" name="gender" value="male"> Nam
+      <input type="radio" id="female" name="gender" value="female"> Nữ
+      <div id="gender-error" class="error-message"></div>
+    </div>
+
+    <div class="mb-3 form-check">
+      <input type="checkbox" class="form-check-input" id="terms">
+      <label class="form-check-label" for="terms">Chấp nhận điều khoản</label>
+      <div id="terms-error" class="error-message"></div>
+    </div>
+
+    <button type="submit" class="btn btn-primary">Đăng ký</button>
+  </form>
+
+  <div id="success-message" class="mt-4" style="display: none;">
+    <h3>Đăng ký thành công! 🎉</h3>
+    <p id="user-name"></p>
+  </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+  // Hàm hiển thị lỗi
+  function showError(fieldId, message) {
+    document.getElementById(`${fieldId}-error`).textContent = message;
+  }
+
+  // Hàm xóa lỗi
+  function clearError(fieldId) {
+    document.getElementById(`${fieldId}-error`).textContent = '';
+  }
+
+  // Hàm kiểm tra họ và tên
+  function validateFullname() {
+    const fullname = document.getElementById('fullname').value;
+    const regex = /^[a-zA-Z\s]{3,}$/;
+    if (!fullname) {
+      showError('fullname', 'Họ và tên không được bỏ trống.');
+      return false;
+    } else if (!regex.test(fullname)) {
+      showError('fullname', 'Họ và tên phải chứa ít nhất 3 ký tự, chỉ chứa chữ cái và khoảng trắng.');
+      return false;
+    }
+    clearError('fullname');
+    return true;
+  }
+
+  // Hàm kiểm tra email
+  function validateEmail() {
+    const email = document.getElementById('email').value;
+    const regex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+    if (!email) {
+      showError('email', 'Email không được bỏ trống.');
+      return false;
+    } else if (!regex.test(email)) {
+      showError('email', 'Email không hợp lệ.');
+      return false;
+    }
+    clearError('email');
+    return true;
+  }
+
+  // Hàm kiểm tra số điện thoại
+  function validatePhone() {
+    const phone = document.getElementById('phone').value;
+    const regex = /^0\d{9}$/;
+    if (!phone) {
+      showError('phone', 'Số điện thoại không được bỏ trống.');
+      return false;
+    } else if (!regex.test(phone)) {
+      showError('phone', 'Số điện thoại phải gồm 10 chữ số và bắt đầu bằng 0.');
+      return false;
+    }
+    clearError('phone');
+    return true;
+  }
+
+  // Hàm kiểm tra mật khẩu
+  function validatePassword() {
+    const password = document.getElementById('password').value;
+    const regex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).{8,}$/;
+    if (!password) {
+      showError('password', 'Mật khẩu không được bỏ trống.');
+      return false;
+    } else if (!regex.test(password)) {
+      showError('password', 'Mật khẩu phải chứa ít nhất 1 chữ hoa, 1 chữ thường và 1 số.');
+      return false;
+    }
+    clearError('password');
+    return true;
+  }
+
+  // Hàm kiểm tra xác nhận mật khẩu
+  function validateConfirmPassword() {
+    const password = document.getElementById('password').value;
+    const confirmPassword = document.getElementById('confirm-password').value;
+    if (confirmPassword !== password) {
+      showError('confirm-password', 'Mật khẩu xác nhận không khớp.');
+      return false;
+    }
+    clearError('confirm-password');
+    return true;
+  }
+
+  // Hàm kiểm tra giới tính
+  function validateGender() {
+    const gender = document.querySelector('input[name="gender"]:checked');
+    if (!gender) {
+      showError('gender', 'Giới tính là trường bắt buộc.');
+      return false;
+    }
+    clearError('gender');
+    return true;
+  }
+
+  // Hàm kiểm tra điều khoản
+  function validateTerms() {
+    const terms = document.getElementById('terms').checked;
+    if (!terms) {
+      showError('terms', 'Bạn phải chấp nhận điều khoản.');
+      return false;
+    }
+    clearError('terms');
+    return true;
+  }
+
+  // Hàm xử lý submit
+  document.getElementById('registration-form').addEventListener('submit', function(event) {
+    event.preventDefault();
+    
+    // Validate tất cả các trường
+    const isValid =
+      validateFullname() &
+      validateEmail() &
+      validatePhone() &
+      validatePassword() &
+      validateConfirmPassword() &
+      validateGender() &
+      validateTerms();
+    
+    if (isValid) {
+      // Ẩn form và hiển thị thông báo thành công
+      document.getElementById('registration-form').style.display = 'none';
+      document.getElementById('success-message').style.display = 'block';
+      document.getElementById('user-name').textContent = `Chào mừng, ${document.getElementById('fullname').value}!`;
+    }
+  });
+
+  // Thêm sự kiện blur và input
+  document.getElementById('fullname').addEventListener('blur', validateFullname);
+  document.getElementById('email').addEventListener('blur', validateEmail);
+  document.getElementById('phone').addEventListener('blur', validatePhone);
+  document.getElementById('password').addEventListener('blur', validatePassword);
+  document.getElementById('confirm-password').addEventListener('blur', validateConfirmPassword);
+  document.getElementById('gender').addEventListener('blur', validateGender);
+  document.getElementById('terms').addEventListener('blur', validateTerms);
+
+  // Xóa lỗi khi nhập lại
+  document.getElementById('fullname').addEventListener('input', () => clearError('fullname'));
+  document.getElementById('email').addEventListener('input', () => clearError('email'));
+  document.getElementById('phone').addEventListener('input', () => clearError('phone'));
+  document.getElementById('password').addEventListener('input', () => clearError('password'));
+  document.getElementById('confirm-password').addEventListener('input', () => clearError('confirm-password'));
+  document.getElementById('gender').addEventListener('input', () => clearError('gender'));
+  document.getElementById('terms').addEventListener('input', () => clearError('terms'));
+
+</script>
+
+</body>
+</html>

@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Multi-step Form</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+  <style>
+    .error-message {
+      color: red;
+      font-size: 0.9rem;
+    }
+    .progress-bar {
+      background-color: #007bff;
+    }
+    .step-content {
+      display: none;
+    }
+    .step-content.active {
+      display: block;
+    }
+  </style>
+</head>
+<body>
+
+<div class="container mt-5">
+  <h2>Form Đăng Ký Nhiều Bước</h2>
+
+  <!-- Thanh tiến trình -->
+  <div class="progress">
+    <div id="progress-bar" class="progress-bar" role="progressbar" style="width: 33%" aria-valuenow="1" aria-valuemin="0" aria-valuemax="3"></div>
+  </div>
+
+  <!-- Bước 1: Thông tin cá nhân -->
+  <div class="step-content active" id="step-1">
+    <h3>Bước 1: Thông tin cá nhân</h3>
+    <div class="mb-3">
+      <label for="fullname" class="form-label">Họ và tên</label>
+      <input type="text" class="form-control" id="fullname" name="fullname">
+      <div id="fullname-error" class="error-message"></div>
+    </div>
+    <div class="mb-3">
+      <label for="dob" class="form-label">Ngày sinh</label>
+      <input type="date" class="form-control" id="dob" name="dob">
+      <div id="dob-error" class="error-message"></div>
+    </div>
+    <div class="mb-3">
+      <label class="form-label">Giới tính</label><br>
+      <input type="radio" id="male" name="gender" value="male"> Nam
+      <input type="radio" id="female" name="gender" value="female"> Nữ
+      <div id="gender-error" class="error-message"></div>
+    </div>
+    <button type="button" id="next-1" class="btn btn-primary">Tiếp theo</button>
+  </div>
+
+  <!-- Bước 2: Thông tin tài khoản -->
+  <div class="step-content" id="step-2">
+    <h3>Bước 2: Thông tin tài khoản</h3>
+    <div class="mb-3">
+      <label for="email" class="form-label">Email</label>
+      <input type="email" class="form-control" id="email" name="email">
+      <div id="email-error" class="error-message"></div>
+    </div>
+    <div class="mb-3">
+      <label for="password" class="form-label">Mật khẩu</label>
+      <input type="password" class="form-control" id="password" name="password">
+      <div id="password-error" class="error-message"></div>
+    </div>
+    <div class="mb-3">
+      <label for="confirm-password" class="form-label">Xác nhận mật khẩu</label>
+      <input type="password" class="form-control" id="confirm-password" name="confirm-password">
+      <div id="confirm-password-error" class="error-message"></div>
+    </div>
+    <button type="button" id="back-1" class="btn btn-secondary">Quay lại</button>
+    <button type="button" id="next-2" class="btn btn-primary">Tiếp theo</button>
+  </div>
+
+  <!-- Bước 3: Xác nhận -->
+  <div class="step-content" id="step-3">
+    <h3>Bước 3: Xác nhận thông tin</h3>
+    <p><strong>Họ và tên:</strong> <span id="confirm-fullname"></span></p>
+    <p><strong>Ngày sinh:</strong> <span id="confirm-dob"></span></p>
+    <p><strong>Giới tính:</strong> <span id="confirm-gender"></span></p>
+    <p><strong>Email:</strong> <span id="confirm-email"></span></p>
+    <p><strong>Mật khẩu:</strong> <span id="confirm-password-text"></span></p>
+    <button type="button" id="back-2" class="btn btn-secondary">Quay lại</button>
+    <button type="submit" id="submit" class="btn btn-success">Đăng ký</button>
+  </div>
+
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+  let currentStep = 1;
+  const totalSteps = 3;
+
+  // Các hàm hiển thị lỗi
+  function showError(fieldId, message) {
+    document.getElementById(`${fieldId}-error`).textContent = message;
+  }
+
+  function clearError(fieldId) {
+    document.getElementById(`${fieldId}-error`).textContent = '';
+  }
+
+  // Hàm kiểm tra thông tin cá nhân
+  function validateStep1() {
+    const fullname = document.getElementById('fullname').value;
+    const dob = document.getElementById('dob').value;
+    const gender = document.querySelector('input[name="gender"]:checked');
+    let isValid = true;
+
+    if (!fullname) {
+      showError('fullname', 'Họ và tên không được bỏ trống.');
+      isValid = false;
+    } else {
+      clearError('fullname');
+    }
+
+    if (!dob) {
+      showError('dob', 'Ngày sinh không được bỏ trống.');
+      isValid = false;
+    } else {
+      clearError('dob');
+    }
+
+    if (!gender) {
+      showError('gender', 'Giới tính là trường bắt buộc.');
+      isValid = false;
+    } else {
+      clearError('gender');
+    }
+
+    return isValid;
+  }
+
+  // Hàm kiểm tra thông tin tài khoản
+  function validateStep2() {
+    const email = document.getElementById('email').value;
+    const password = document.getElementById('password').value;
+    const confirmPassword = document.getElementById('confirm-password').value;
+    let isValid = true;
+
+    const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+    if (!email || !emailRegex.test(email)) {
+      showError('email', 'Email không hợp lệ.');
+      isValid = false;
+    } else {
+      clearError('email');
+    }
+
+    if (!password) {
+      showError('password', 'Mật khẩu không được bỏ trống.');
+      isValid = false;
+    } else {
+      clearError('password');
+    }
+
+    if (password !== confirmPassword) {
+      showError('confirm-password', 'Mật khẩu xác nhận không khớp.');
+      isValid = false;
+    } else {
+      clearError('confirm-password');
+    }
+
+    return isValid;
+  }
+
+  // Hàm chuyển đến bước tiếp theo
+  function goToNextStep() {
+    if (currentStep === 1 && validateStep1()) {
+      currentStep++;
+      updateStep();
+    } else if (currentStep === 2 && validateStep2()) {
+      currentStep++;
+      updateStep();
+    }
+  }
+
+  // Hàm quay lại bước trước
+  function goBack() {
+    currentStep--;
+    updateStep();
+  }
+
+  // Hàm cập nhật giao diện dựa trên bước hiện tại
+  function updateStep() {
+    // Cập nhật bước hiển thị
+    for (let i = 1; i <= totalSteps; i++) {
+      document.getElementById(`step-${i}`).classList.remove('active');
+    }
+    document.getElementById(`step-${currentStep}`).classList.add('active');
+
+    // Cập nhật thanh tiến trình
+    document.getElementById('progress-bar').style.width = `${(currentStep / totalSteps) * 100}%`;
+
+    // Cập nhật nút "Tiếp theo" và "Quay lại"
+    if (currentStep === totalSteps) {
+      document.getElementById('next-1').style.display = 'none';
+      document.getElementById('next-2').style.display = 'none';
+      document.getElementById('submit').style.display = 'inline-block';
+    } else {
+      document.getElementById('next-1').style.display = currentStep === 1 ? 'inline-block' : 'none';
+      document.getElementById('next-2').style.display = currentStep === 2 ? 'inline-block' : 'none';
+      document.getElementById('submit').style.display = 'none';
+    }
+
+    document.getElementById('back-1').style.display = currentStep === 2 || currentStep === 3 ? 'inline-block' : 'none';
+    document.getElementById('back-2').style.display = currentStep === 3 ? 'inline-block' : 'none';
+
+    // Cập nhật thông tin xác nhận
+    if (currentStep === 3) {
+      document.getElementById('confirm-fullname').textContent = document.getElementById('fullname').value;
+      document.getElementById('confirm-dob').textContent = document.getElementById('dob').value;
+      document.getElementById('confirm-gender').textContent = document.querySelector('input[name="gender"]:checked').value === 'male' ? 'Nam' : 'Nữ';
+      document.getElementById('confirm-email').textContent = document.getElementById('email').value;
+      document.getElementById('confirm-password-text').textContent = '**********'; // Ẩn mật khẩu
+    }
+  }
+
+  // Sự kiện nút "Tiếp theo"
+  document.getElementById('next-1').addEventListener('click', goToNextStep);
+  document.getElementById('next-2').addEventListener('click', goToNextStep);
+
+  // Sự kiện nút "Quay lại"
+  document.getElementById('back-1').addEventListener('click', goBack);
+  document.getElementById('back-2').addEventListener('click', goBack);
+
+  // Sự kiện submit
+  document.getElementById('registration-form').addEventListener('submit', function(event) {
+    event.preventDefault();
+    alert('Đăng ký thành công!');
+  });
+</script>
+
+</body>
+</html>
